@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": true,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "black-formatter.args": [
+    "--preview",
+    "--enable-unstable-feature",
+    "string_processing",
+    "--enable-unstable-feature",
+    "multiline_string_handling"
+  ]
+}
