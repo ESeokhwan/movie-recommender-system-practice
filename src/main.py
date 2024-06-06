@@ -1,7 +1,8 @@
 import argparse
 import numpy as np
 from movie_rating import MovieRating, RatingMatrix
-import svd
+from gradient_descent import stochastic_gradient_descent as sgd
+from svd import truncated_svd, full_svd
 
 
 def parse_movie_data(data: str) -> MovieRating:
@@ -62,9 +63,19 @@ print(f"generate rating matrix: {rating_matrix.matrix.shape}")
 
 # make recommendation matrix
 print("")
-filled_matrix = rating_matrix.get_filled_matrix()
-# recommend_matrix = svd.full_svd(filled_matrix)
-recommend_matrix = svd.truncated_svd(filled_matrix, 10)
+
+# filled_matrix = rating_matrix.get_filled_matrix()
+# recommend_matrix = full_svd(filled_matrix)
+# recommend_matrix = truncated_svd(filled_matrix, 10)
+
+recommend_matrix = sgd(
+    rating_matrix.matrix,
+    30,
+    50,
+    0.01,
+    0.01,
+    rating_matrix.total_mean,
+)
 
 
 # test with test data
@@ -88,4 +99,4 @@ for record in read_movie_data(test_data_path):
     d_sq_sum += (real_rating - predicted_rating) ** 2
     test_data_cnt += 1
 
-print(f"RMSE: {np.sqrt(d_sq_sum / test_data_cnt)}")
+print(f"RMSE: {np.sqrt(d_sq_sum / test_data_cnt):.4f}")
