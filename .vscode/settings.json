@@ -1,7 +1,8 @@
 {
   "editor.formatOnSave": true,
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.tabSize": 4
   },
   "black-formatter.args": [
     "--preview",
@@ -9,5 +10,6 @@
     "string_processing",
     "--enable-unstable-feature",
     "multiline_string_handling"
-  ]
+  ],
+  "cSpell.words": ["ndarray"]
 }
