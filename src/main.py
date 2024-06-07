@@ -1,8 +1,9 @@
 import argparse
 import numpy as np
 from movie_rating import MovieRating, RatingMatrix
-from gradient_descent import stochastic_gradient_descent as sgd
+from gradient_descent import sgd
 from svd import truncated_svd, full_svd
+from error_equations import BiasedErrorEquation, BasicErrorEquation
 
 
 def parse_movie_data(data: str) -> MovieRating:
@@ -49,6 +50,40 @@ parser.add_argument(
 parser.add_argument(
     "test_data", metavar="FILE_PATH", type=str, help="a test data file path"
 )
+parser.add_argument(
+    "--method",
+    type=str,
+    default="biased_sgd",
+    help="the method to use (f_svd, truc_svd, sgd, biased_sgd) (default: biased_sgd)",
+)
+
+parser.add_argument(
+    "--k",
+    type=int,
+    default=30,
+    help="the number of latent features (default: 30)",
+)
+
+parser.add_argument(
+    "--n_epochs",
+    type=int,
+    default=50,
+    help="the number of epochs (default: 50)",
+)
+
+parser.add_argument(
+    "--learning_rate",
+    type=float,
+    default=0.01,
+    help="the learning rate (default: 0.01)",
+)
+
+parser.add_argument(
+    "--regularization_rate",
+    type=float,
+    default=0.01,
+    help="the regularization rate (default: 0.01)",
+)
 args = parser.parse_args()
 
 
@@ -64,19 +99,30 @@ print(f"generate rating matrix: {rating_matrix.matrix.shape}")
 # make recommendation matrix
 print("")
 
-# filled_matrix = rating_matrix.get_filled_matrix()
-# recommend_matrix = full_svd(filled_matrix)
-# recommend_matrix = truncated_svd(filled_matrix, 10)
-
-recommend_matrix = sgd(
-    rating_matrix.matrix,
-    30,
-    50,
-    0.01,
-    0.01,
-    rating_matrix.total_mean,
-)
-
+if args.method == "f_svd":
+    filled_matrix = rating_matrix.get_filled_matrix()
+    recommend_matrix = full_svd(filled_matrix)
+elif args.method == "truc_svd":
+    filled_matrix = rating_matrix.get_filled_matrix()
+    recommend_matrix = truncated_svd(filled_matrix, args.k)
+elif args.method == "sgd":
+    recommend_matrix = sgd(
+        BasicErrorEquation(),
+        rating_matrix,
+        args.k,
+        args.regularization_rate,
+        args.n_epochs,
+        args.learning_rate,
+    )
+elif args.method == "biased_sgd":
+    recommend_matrix = sgd(
+        BiasedErrorEquation(),
+        rating_matrix,
+        args.k,
+        args.regularization_rate,
+        args.n_epochs,
+        args.learning_rate,
+    )
 
 # test with test data
 print("")

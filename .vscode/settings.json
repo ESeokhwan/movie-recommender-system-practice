@@ -11,5 +11,5 @@
     "--enable-unstable-feature",
     "multiline_string_handling"
   ],
-  "cSpell.words": ["ndarray"]
+  "cSpell.words": ["decomp", "ndarray", "rsme"]
 }
