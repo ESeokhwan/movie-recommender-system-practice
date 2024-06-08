@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 numpy = "*"
+scikit-surprise = "*"
+pandas = "*"
+cython = "*"
+setuptools = "*"
 
 [dev-packages]
 flake8 = "*"

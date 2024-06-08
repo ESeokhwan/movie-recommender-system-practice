@@ -1,4 +1,4 @@
-from error_equations import ErrorEquation
+from biased_error_equation import ErrorEquation
 from movie_rating import RatingMatrix
 
 
@@ -12,12 +12,12 @@ def sgd(
 ):
     print("stochastic gradient descent")
     print(
-        f"method: {error_eq.__class__.__name__},"
+        f"method: {error_eq.__class__.__name__}, "
         f"k: {k}, n_epochs: {n_epochs}, learning_rate: {learning_rate},"
         f" regularization_rate: {regularization_rate}"
     )
 
-    error_eq.init_params(matrix, k, regularization_rate)
+    error_eq.init_params(matrix.matrix, matrix.total_mean, k, regularization_rate)
 
     train_error = 0
     for epoch in range(n_epochs):

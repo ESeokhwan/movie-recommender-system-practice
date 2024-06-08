@@ -1,9 +1,14 @@
 import argparse
+import time
 import numpy as np
 from movie_rating import MovieRating, RatingMatrix
 from gradient_descent import sgd
 from svd import truncated_svd, full_svd
-from error_equations import BiasedErrorEquation, BasicErrorEquation
+from error_equations import (
+    BiasedErrorEquation,
+    BasicErrorEquation,
+    BiasedPPErrorEquation,
+)
 
 
 def parse_movie_data(data: str) -> MovieRating:
@@ -54,34 +59,37 @@ parser.add_argument(
     "--method",
     type=str,
     default="biased_sgd",
-    help="the method to use (f_svd, truc_svd, sgd, biased_sgd) (default: biased_sgd)",
+    help=(
+        "the method to use (f_svd, truc_svd, sgd, biased_sgd, biased_sgd++) (default:"
+        " biased_sgd)"
+    ),
 )
 
 parser.add_argument(
     "--k",
     type=int,
-    default=30,
-    help="the number of latent features (default: 30)",
+    default=100,
+    help="the number of latent features (default: 100)",
 )
 
 parser.add_argument(
     "--n_epochs",
     type=int,
-    default=50,
+    default=30,
     help="the number of epochs (default: 50)",
 )
 
 parser.add_argument(
     "--learning_rate",
     type=float,
-    default=0.01,
-    help="the learning rate (default: 0.01)",
+    default=0.005,
+    help="the learning rate (default: 0.005)",
 )
 
 parser.add_argument(
     "--regularization_rate",
     type=float,
-    default=0.01,
+    default=0.02,
     help="the regularization rate (default: 0.01)",
 )
 args = parser.parse_args()
@@ -98,6 +106,8 @@ print(f"generate rating matrix: {rating_matrix.matrix.shape}")
 
 # make recommendation matrix
 print("")
+
+start = time.time()
 
 if args.method == "f_svd":
     filled_matrix = rating_matrix.get_filled_matrix()
@@ -123,6 +133,18 @@ elif args.method == "biased_sgd":
         args.n_epochs,
         args.learning_rate,
     )
+elif args.method == "biased_sgd++":
+    recommend_matrix = sgd(
+        BiasedPPErrorEquation(),
+        rating_matrix,
+        args.k,
+        args.regularization_rate,
+        args.n_epochs,
+        args.learning_rate,
+    )
+
+end = time.time()
+print(f"model training time: {end - start:.2f}s")
 
 # test with test data
 print("")
