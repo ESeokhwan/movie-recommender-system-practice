@@ -158,13 +158,6 @@ class BiasedErrorEquation(ErrorEquation):
 
     def predict(self) -> np.ndarray:
         shape = self.matrix.shape
-        print(shape)
-        print("p: ", self.__p.shape)
-        print("q: ", self.__q.shape)
-        print("user_b: ", self.__user_b.shape)
-        print("tile user_b: ", np.tile(self.__user_b, (shape[1], 1)).shape)
-        print("movie_b: ", self.__movie_b.shape)
-        print("tile movie_b: ", np.tile(self.__movie_b, (shape[0], 1)).shape)
         return (
             self.__p @ self.__q
             + np.tile(self.__user_b, (shape[1], 1)).T
@@ -288,13 +281,6 @@ class BiasedPPErrorEquation(ErrorEquation):
 
     def predict(self) -> np.ndarray:
         shape = self.matrix.shape
-        print(shape)
-        print("p: ", self.__p.shape)
-        print("q: ", self.__q.shape)
-        print("user_b: ", self.__user_b.shape)
-        print("tile user_b: ", np.tile(self.__user_b, (shape[1], 1)).shape)
-        print("movie_b: ", self.__movie_b.shape)
-        print("tile movie_b: ", np.tile(self.__movie_b, (shape[0], 1)).shape)
         return (
             (self.__p + self.__calc_addition_matrix_on_p()) @ self.__q
             + np.tile(self.__user_b, (shape[1], 1)).T
