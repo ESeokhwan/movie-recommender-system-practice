@@ -1,10 +1,10 @@
 import argparse
 import time
 import numpy as np
-from movie_rating import MovieRating, RatingMatrix
-from gradient_descent import sgd
+from .movie_rating import MovieRating, RatingMatrix
+from .gradient_descent import sgd
 
-from biased_error_equation import BiasedErrorEquation
+from .biased_error_equation import BiasedErrorEquation
 
 
 def parse_movie_data(data: str) -> MovieRating:

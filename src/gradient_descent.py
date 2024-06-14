@@ -1,5 +1,5 @@
-from biased_error_equation import ErrorEquation
-from movie_rating import RatingMatrix
+from .error_equations import ErrorEquation
+from .movie_rating import RatingMatrix
 
 
 def sgd(
