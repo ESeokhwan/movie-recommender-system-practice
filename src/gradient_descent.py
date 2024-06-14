@@ -25,10 +25,10 @@ def sgd(
         if not error_eq.update_params(learning_rate):
             print("Unexpected Termination -- Error in updating params")
             break
-        if verbose:
+        if verbose is True:
             train_error = error_eq.calc_error()
             print(f"epoch: {epoch}, train_error: {train_error:.4f}")
 
-    if verbose:
+    if verbose is True:
         print(f"train_error: {train_error:.4f}")
     return error_eq.predict()
