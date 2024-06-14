@@ -27,6 +27,11 @@ def read_movie_data(filepath):
     file.close()
 
 
+def make_prediction_file_name(train_file_path: str):
+    file_name_st_idx = train_file_path.rfind("/")
+    return train_file_path[(file_name_st_idx + 1) :] + "_prediction.txt"
+
+
 def predict_rating(
     record: MovieRating,
     user_idx_map: dict,
@@ -76,7 +81,7 @@ parser.add_argument(
     "--n_epochs",
     type=int,
     default=30,
-    help="the number of epochs (default: 50)",
+    help="the number of epochs (default: 30)",
 )
 
 parser.add_argument(
@@ -90,7 +95,7 @@ parser.add_argument(
     "--regularization_rate",
     type=float,
     default=0.02,
-    help="the regularization rate (default: 0.01)",
+    help="the regularization rate (default: 0.02)",
 )
 args = parser.parse_args()
 
@@ -150,6 +155,9 @@ print(f"model training time: {end - start:.2f}s")
 print("")
 print("read test_data (", test_data_path, ")")
 
+prediction_file_path = make_prediction_file_name(training_data_path)
+file = open(prediction_file_path, "wt")
+
 test_data_cnt = 0
 d_sq_sum = 0
 for record in read_movie_data(test_data_path):
@@ -163,8 +171,10 @@ for record in read_movie_data(test_data_path):
         rating_matrix.user_mean,
         rating_matrix.movie_mean,
     )
+    file.write(f"{record.user_id}\t{record.movie_id}\t{predicted_rating}\n")
 
     d_sq_sum += (real_rating - predicted_rating) ** 2
     test_data_cnt += 1
 
+file.close()
 print(f"RMSE: {np.sqrt(d_sq_sum / test_data_cnt):.4f}")
