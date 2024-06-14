@@ -9,6 +9,7 @@ def sgd(
     regularization_rate: float,
     n_epochs: int,
     learning_rate: float,
+    verbose: bool = False,
 ):
     print("stochastic gradient descent")
     print(
@@ -24,7 +25,10 @@ def sgd(
         if not error_eq.update_params(learning_rate):
             print("Unexpected Termination -- Error in updating params")
             break
-        train_error = error_eq.calc_error()
-        print(f"epoch: {epoch}, train_error: {train_error:.4f}")
-    print(f"train_error: {train_error:.4f}")
+        if verbose:
+            train_error = error_eq.calc_error()
+            print(f"epoch: {epoch}, train_error: {train_error:.4f}")
+
+    if verbose:
+        print(f"train_error: {train_error:.4f}")
     return error_eq.predict()

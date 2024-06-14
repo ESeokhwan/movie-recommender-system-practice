@@ -97,6 +97,13 @@ parser.add_argument(
     default=0.02,
     help="the regularization rate (default: 0.02)",
 )
+
+parser.add_argument(
+    "--verbose",
+    type=bool,
+    default=False,
+    help="print verbose output",
+)
 args = parser.parse_args()
 
 
@@ -128,6 +135,7 @@ elif args.method == "sgd":
         args.regularization_rate,
         args.n_epochs,
         args.learning_rate,
+        args.verbose,
     )
 elif args.method == "biased_sgd":
     recommend_matrix = sgd(
@@ -137,6 +145,7 @@ elif args.method == "biased_sgd":
         args.regularization_rate,
         args.n_epochs,
         args.learning_rate,
+        args.verbose,
     )
 elif args.method == "biased_sgd++":
     recommend_matrix = sgd(
@@ -146,6 +155,7 @@ elif args.method == "biased_sgd++":
         args.regularization_rate,
         args.n_epochs,
         args.learning_rate,
+        args.verbose,
     )
 
 end = time.time()
