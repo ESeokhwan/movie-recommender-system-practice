@@ -122,8 +122,11 @@ class BiasedErrorEquation(ErrorEquation):
         axis2 = matrix.shape[1]
         self.matrix = matrix
 
-        self.__p = np.full((axis1, k), random.normalvariate(0, sigma))
-        self.__q = np.full((k, axis2), random.normalvariate(0, sigma))
+        init_p = random.normalvariate(0, sigma)
+        init_q = random.normalvariate(0, sigma)
+        print(f"init_p: {init_p:.4f}, init_q: {init_q:.4f}")
+        self.__p = np.full((axis1, k), init_p)
+        self.__q = np.full((k, axis2), init_q)
         # self.__p = np.zeros((axis1, k))
         # self.__q = np.zeros((k, axis2))
         self.__user_b = np.zeros(axis1)
@@ -238,8 +241,14 @@ class BiasedPPErrorEquation(ErrorEquation):
         axis2 = matrix.shape[1]
         self.matrix = matrix
         self.__rated_matrix = BiasedPPErrorEquation.__get_rated_matrix(matrix)
-        self.__p = np.full((axis1, k), random.normalvariate(0, sigma))
-        self.__q = np.full((k, axis2), random.normalvariate(0, sigma))
+
+        init_p = random.normalvariate(0, sigma)
+        init_q = random.normalvariate(0, sigma)
+        print(f"init_p: {init_p:.4f}, init_q: {init_q:.4f}")
+        self.__p = np.full((axis1, k), init_p)
+        self.__q = np.full((k, axis2), init_q)
+        # self.__p = np.zeros((axis1, k))
+        # self.__q = np.zeros((k, axis2))
         self.__user_b = np.zeros(axis1)
         self.__movie_b = np.zeros(axis2)
         self.__y = np.zeros((axis2, k))
